@@ -1,0 +1,18 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: cockroachdb
+upstream:
+  type: git
+  git:
+    repo: https://github.com/kubernetes/examples
+    directory: /staging/cockroachdb
+    ref: master
+  updateStrategy: resource-merge
+upstreamLock:
+  type: git
+  git:
+    repo: https://github.com/kubernetes/examples
+    directory: /staging/cockroachdb
+    ref: master
+    commit: 6a762deb16a2625584fe3d85ce5194ef58c14429
