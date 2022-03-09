@@ -68,7 +68,6 @@ kpt fn eval wordpress -i search-replace:v0.1 -- 'by-path=spec.selector.tier'
 
 ```
 
-
 check diff
 ```sh
 git diff
@@ -165,3 +164,27 @@ Package "cockroachdb"
 └── [cockroachdb-statefulset.yaml]  Service cockroachdb-public
 
 ```
+
+## MonoRepos
+We may have a Git repo containing multiple packages. kpt provides a tagging 
+convention to enable packages to be independently versioned.
+
+Here is a sample tag for monrepo 
+[kpt/package-examples](https://github.com/GoogleContainerTools/kpt/package-examples)
+used for an example. You will see wordpress version v0.8 tagged as
+[package-examples/wordpress/v0.8](https://github.com/GoogleContainerTools/kpt/releases/tag/package-examples%2Fwordpress%2Fv0.8)
+
+The following kpt command uses this convention to find the wordpress package in the monorepo:
+```bash
+kpt pkg get https://github.com/GoogleContainerTools/kpt.git/package-examples/wordpress@v0.8
+```
+
+## Custom Policies
+There is a small section on 
+[custom policies in kpt book](https://kpt.dev/book/07-effective-customizations/02-limiting-package-changes).
+It highlights the [gatekeeper](https://catalog.kpt.dev/gatekeeper/v0.2/) with templates to define
+policies. Gatekeeper function uses ***OPA Constraint Framework***, you can read more about it 
+[here](https://github.com/open-policy-agent/frameworks/tree/master/constraint#opa-constraint-framework).
+The pattern is used by 
+[Google Anthos Config Management](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library)
+to create a set of out of the box templates for common policies to enforce.
