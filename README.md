@@ -42,6 +42,58 @@ docker run gcr.io/kpt-dev/kpt-gcloud:v1.0.0-beta.13 version
    * Docker
    * Kubernetes (Optional for deployment)
 
+## Data Model
+The kpt data model is focus on manifest orchestration, validation and notification.
+It does allow a heiarchy but it is not part of the data model like with 
+[helm dependency](https://helm.sh/docs/helm/helm_dependency/). The heiarchy is
+discovered using how kptfiles are organized in the file system. I assume
+that the developers decided that you would not need to explictly
+define dependency and version defintion as he files system
+is in a git repo and under version control. 
+
+It is not opinionated about the application organization. The meta data for the
+resource has name and kind of kptfile; but kpt CLI calls these packages.
+
+```yaml
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: wordpress
+upstream:
+  type: git
+  git:
+    repo: https://github.com/GoogleContainerTools/kpt
+    directory: /package-examples/wordpress
+    ref: v0.7
+  updateStrategy: resource-merge
+upstreamLock:
+  type: git
+  git:
+    repo: https://github.com/GoogleContainerTools/kpt
+    directory: /package-examples/wordpress
+    ref: package-examples/wordpress/v0.7
+    commit: cbd342d350b88677e522bf0d9faa0675edb8bbc1
+info:
+  emails:
+    - kpt-team@google.com
+  description: This is an example wordpress package with mysql subpackage.
+pipeline:
+  mutators:
+    - image: gcr.io/kpt-fn/set-label:v0.1
+      configMap:
+        app: wordpress
+  validators:
+    - image: gcr.io/kpt-fn/kubeval:v0.1```
+```
+
+## Quickstart
+
+Download sample package
+
+```sh
+kpt pkg get https://github.com/GoogleContainerTools/kpt/package-examples/nginx@v0.7
+```
+
 ## Quickstart
 
 Download sample package
@@ -93,6 +145,9 @@ cat >> Kptfile <<EOF
         env: dev
 EOF
 ```
+
+For a list of more complete functions that are bundled with kpt
+look [here](https://gcr.io/images/kpt-fn)
 
 Now render it
 ```bash
