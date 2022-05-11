@@ -147,7 +147,9 @@ EOF
 ```
 
 For a list of more complete functions that are bundled with kpt
-look [here](https://gcr.io/images/kpt-fn)
+look at the catalog defnition [here](https://catalog.kpt.dev) and
+the list of images [here](https://gcr.io/images/kpt-fn).
+For the [search-replace catalog reference](https://catalog.kpt.dev/search-replace/v0.1/).
 
 Now render it
 ```bash
